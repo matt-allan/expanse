@@ -19,7 +19,11 @@
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "extendInfo": {
+          "LSUIElement": 1
+        }
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
