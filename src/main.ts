@@ -1,5 +1,5 @@
-import { app, BrowserWindow } from 'electron';
-declare var MAIN_WINDOW_WEBPACK_ENTRY: any;
+import { app, BrowserWindow, Menu, Tray } from 'electron';
+declare var MAIN_WINDOW_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -8,7 +8,9 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow: any;
+let mainWindow: BrowserWindow | null;
+
+let tray: Tray | null;
 
 const createWindow = () => {
   // Create the browser window.
@@ -33,10 +35,34 @@ const createWindow = () => {
   });
 };
 
+const createTray = () => {
+  tray = new Tray('./resources/img/menubar/8-8/menubar-iconTemplate.png');
+
+  const contextMenu = Menu.buildFromTemplate([
+    {
+      label: 'Open',
+      click: async () => {
+        if (!mainWindow) {
+          createWindow();
+        }
+      }
+    },
+    {
+      label: 'Quit',
+      role: 'quit'
+    },
+  ]);
+
+  tray.setContextMenu(contextMenu);
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+  createWindow();
+  createTray();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
