@@ -5,7 +5,7 @@ import { createWindow } from './window';
 // be removed automatically when the JavaScript object is garbage collected.
 let tray: Tray | null;
 
-const createTray = () => {
+export const createTray = () => {
   tray = new Tray('./resources/img/menubar/8-8/menubar-iconTemplate.png');
 
   const contextMenu = Menu.buildFromTemplate([
@@ -24,10 +24,3 @@ const createTray = () => {
 
   tray.setContextMenu(contextMenu);
 }
-
-export const register = () => {
-  app.on('ready', () => {
-    createTray();
-  });
-}
-
