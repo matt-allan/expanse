@@ -12,7 +12,6 @@ export const createTray = () => {
     {
       label: 'Open',
       click: async () => {
-        // todo: decouple with ipc?
         createWindow();
       }
     },
