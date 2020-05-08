@@ -1,6 +1,6 @@
 {
-  "name": "wristguard",
-  "productName": "wristguard",
+  "name": "expanse",
+  "productName": "expanse",
   "version": "1.0.0",
   "description": "My Electron application description",
   "main": ".webpack/main",
@@ -28,7 +28,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "wristguard"
+            "name": "expanse"
           }
         },
         {
@@ -57,7 +57,10 @@
                 {
                   "html": "./src/index.html",
                   "js": "./src/App.tsx",
-                  "name": "main_window"
+                  "name": "main_window",
+                  "preload": {
+                    "js": "./src/preload.ts"
+                  }
                 }
               ]
             }

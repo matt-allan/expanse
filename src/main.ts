@@ -1,4 +1,4 @@
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import { createTray } from './tray';
 import { createWindow } from './window';
 import { Timer } from './timer';
@@ -9,10 +9,34 @@ if (require('electron-squirrel-startup')) {
 }
 
 const timer = new Timer(25);
-// todo: wire timer to tray and React component state
+
+timer.on('tick', (seconds: number) => console.log(seconds));
+
+ipcMain.on('timer:start', (event) => {
+  timer.start();
+});
+
+ipcMain.on('timer:pause', (event) => {
+  timer.pause();
+});
+
+ipcMain.on('timer:resume', (event) => {
+  timer.resume();
+});
+
+ipcMain.on('timer:restart', (event) => {
+  timer.restart();
+});
 
 app.on('ready', () => {
-  createWindow();
+  let window = createWindow();
+
+  // todo: clean this up
+  timer.on('paused', () => {
+    console.log('timer paused in main...');
+    window.webContents.send('timer:paused');
+  });
+
   createTray();
 });
 
