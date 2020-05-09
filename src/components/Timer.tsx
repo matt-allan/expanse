@@ -6,6 +6,8 @@ const DURATION_REGEXP = /P([0-9]+)H([0-9]+)M([0-9]+)S/;
 
 const SECONDS_PER_SESSION = 25 * 60;
 
+const timerProxy = window.expanse.timer;
+
 const parseDuration = (duration: string): number => {
     let match = DURATION_REGEXP.exec(duration);
 
@@ -24,6 +26,17 @@ export const Timer = () => {
   const [paused, setPaused] = useState(true);
 
   const [secondsLeft, setSecondsLeft] = useState(SECONDS_PER_SESSION);
+
+  const restart = () => {
+    setSecondsLeft(SECONDS_PER_SESSION);
+    setPaused(false);
+    timerProxy.restart();
+  };
+
+  const togglePaused = () => {
+    setPaused(!paused);
+    !paused ? timerProxy.pause() : timerProxy.resume();
+  }
 
   return (
     <React.Fragment>
@@ -49,8 +62,8 @@ export const Timer = () => {
         />
       </Box>
       <Box direction="row" justify="center" gap="medium" pad={{top: 'small', bottom: 'large'}}>
-        <Button plain={true} icon={<Refresh />} onClick={() => setSecondsLeft(SECONDS_PER_SESSION)} />
-        <Button plain={true} icon={paused ? <Play /> : <Pause />} onClick={() => setPaused(!paused)} />
+        <Button plain={true} icon={<Refresh />} onClick={restart} />
+        <Button plain={true} icon={paused ? <Play /> : <Pause />} onClick={togglePaused} />
       </Box>
     </React.Fragment>
   );
