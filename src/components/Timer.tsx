@@ -32,21 +32,16 @@ export const Timer = () => {
 
   const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
 
-  useEffect(() => {
-    (async () => {
-      setSeconds(await timerProxy.seconds());
-      setRunning(await timerProxy.running());
-    })();
-  }, []);
+  const syncState = async () => {
+    setSeconds(await timerProxy.seconds());
+    setRunning(await timerProxy.running());
+  }
 
   useEffect(() => {
-    timerProxy.on('stopped', () => setRunning(false));
-    timerProxy.on('started', () => setRunning(true));
-    timerProxy.on('restarted', async () => {
-      // todo: get from event
-      setSeconds(await timerProxy.seconds());
-      setRunning(true);
-    });
+    syncState();
+    timerProxy.on('stopped', syncState);
+    timerProxy.on('started', syncState);
+    timerProxy.on('restarted', syncState);
   }, []);
 
   const restart = () => {
