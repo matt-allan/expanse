@@ -36,9 +36,9 @@ export const Timer = ({ timerProxy }: TimerProps) => {
   const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
 
   const syncState = (state: TimerState) => {
-    const { seconds, remaining, running} = state;
+    const { seconds, remaining, status} = state;
     setSeconds({ seconds, remaining });
-    setRunning(running);
+    setRunning(status == 'started');
   }
 
   useEffect(() => {

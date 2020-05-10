@@ -1,6 +1,6 @@
 import { app, Menu, Tray } from 'electron';
 import { createWindow } from './window';
-import { Timer } from './timer';
+import { Timer, Status } from './timer';
 
 // Keep a global reference of the tray object, if you don't, the tray will
 // be removed automatically when the JavaScript object is garbage collected.
@@ -29,13 +29,13 @@ const contextMenu = (timer: Timer): Menu => {
       label: 'Start',
       id: 'start',
       click: async () => timer.start(),
-      visible: !timer.running(),
+      visible: timer.status != Status.Started,
     },
     {
       label: 'Stop',
       id: 'stop',
       click: async () => timer.stop(),
-      visible: timer.running(),
+      visible: timer.status == Status.Started,
     },
     {
       label: 'Restart',

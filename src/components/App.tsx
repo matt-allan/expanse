@@ -12,6 +12,8 @@ export const App = () => {
 
   useEffect(() => {
     timerProxy.on('end', () => {
+      // todo: need to sync this state from the main process, so it
+      // still works when end happens while the window is closed
       setShouldBreak(true);
     });
     return () => {

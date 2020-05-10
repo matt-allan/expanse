@@ -1,10 +1,10 @@
 import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
-import { Timer } from './timer';
+import { Timer, Status } from './timer';
 
 export interface TimerState {
+  status: Status,
   seconds: number,
   remaining: number, 
-  running: boolean,
 }
 
 export interface TimerProxyInterface {
@@ -41,9 +41,9 @@ export const timerProxy = {
 };
 
 const getState = (timer: Timer): TimerState => ({
+  status: timer.status,
   seconds: timer.seconds,
   remaining: timer.remaining,
-  running: timer.running(),
 });
 
 export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) => {
