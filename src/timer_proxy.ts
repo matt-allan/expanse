@@ -9,7 +9,8 @@ export interface TimerState {
 
 export interface TimerProxyInterface {
   state(): Promise<TimerState>;
-  on(event: string, callback: (state: TimerState) => void): void;
+  on(channel: string, callback: (state: TimerState) => void): void;
+  removeAllListeners(channel: string): void;
   start(): void;
   stop(): void;
   restart(): void;
@@ -19,10 +20,14 @@ export const timerProxy = {
   state: async (): Promise<TimerState> => {
     return ipcRenderer.invoke('timer:state');
   },
-  on: (event: string, callback: (state: TimerState) => {}) => {
-    ipcRenderer.on(`timer:${event}`, (event: IpcRendererEvent, state: TimerState) => {
+  on: (channel: string, callback: (state: TimerState) => {}) => {
+    // todo: keep a map of callback => listener callback so we can remove subscriptions
+    ipcRenderer.on(`timer:${channel}`, (event: IpcRendererEvent, state: TimerState) => {
       callback(state);
     });
+  },
+  removeAllListeners: (channel: string) => {
+    ipcRenderer.removeAllListeners(channel);
   },
   start: () => {
     ipcRenderer.send('timer:start');
@@ -47,13 +52,14 @@ export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) =>
   ipcMain.on('timer:stop', () => timer.stop());
   ipcMain.on('timer:restart', () => timer.restart());
 
-  const send = (event: string) => {
+  const send = (channel: string) => {
     if (window) {
-      window.webContents.send(event, getState(timer));
+      window.webContents.send(channel, getState(timer));
     }
   };
 
   timer.on('started', () => send('timer:started'));
   timer.on('stopped', () => send('timer:stopped'));
   timer.on('restarted', () => send('timer:restarted'));
+  timer.on('end', () => send('timer:end'));
 }

@@ -7,7 +7,12 @@ import { Timer } from './timer';
 let tray: Tray | null;
 
 const trayImage = (timer: Timer) => {
-  const eighths = Math.round((timer.remaining / timer.seconds) * 8);
+  let eighths = Math.round((timer.remaining / timer.seconds) * 8);
+
+  if (eighths > 8 || eighths < 0) {
+    console.error(`Invalid eighths calculation: ${eighths}`);
+    eighths = 0;
+  }
 
   return `./resources/img/menubar/${eighths}-8/menubar-iconTemplate.png`;
 };

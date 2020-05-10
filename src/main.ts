@@ -11,7 +11,7 @@ if (require('electron-squirrel-startup')) {
 
 let window: BrowserWindow | null = null;
 
-const timer = new Timer(25);
+const timer = new Timer(0, 15);
 
 // debug
 timer.on('tick', (seconds: number) => console.log(seconds));

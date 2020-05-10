@@ -40,9 +40,9 @@ export class Timer extends EventEmitter {
   startTimer = (): void => {
     this.timer = setInterval(() => {
       this.emit('tick', this.remaining);
-      if (--this.remaining < 0) {
-        // todo: separate end event?
-        this.stop();
+      if (--this.remaining == 0) {
+        this.stopTimer();
+        this.emit('end');
       }
     }, 1000);
   }

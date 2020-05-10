@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Grommet, Box, Button, Clock, Heading, Meter } from 'grommet';
 import { Play, Pause, Resume, Refresh } from "grommet-icons";
-import { TimerState } from './../timer_proxy';
+import { TimerState, TimerProxyInterface } from './../timer_proxy';
 
 const DURATION_REGEXP = /P([0-9]+)H([0-9]+)M([0-9]+)S/;
 
-const timerProxy = window.expanse.timer;
-
 const parseDuration = (duration: string): number => {
-    let match = DURATION_REGEXP.exec(duration);
+  let match = DURATION_REGEXP.exec(duration);
 
-    if (!match) {
-      throw `Cannot parse '${duration}'`;
-    }
+  if (!match) {
+    throw `Cannot parse '${duration}'`;
+  }
 
-    const hours = parseFloat(match[1]);
-    const minutes = parseFloat(match[2]) || 0;
-    const seconds = parseFloat(match[3]) || 0;
+  const hours = parseFloat(match[1]);
+  const minutes = parseFloat(match[2]) || 0;
+  const seconds = parseFloat(match[3]) || 0;
 
-    return (hours * 60 * 60) + (minutes * 60) + seconds;
+  return (hours * 60 * 60) + (minutes * 60) + seconds;
 };
 
 const interval = (remaining: number): string => {
@@ -28,7 +26,11 @@ const interval = (remaining: number): string => {
   return `PT0H${minutes}M${seconds}S`;
 }
 
-export const Timer = () => {
+type TimerProps = {
+  timerProxy: TimerProxyInterface
+};
+
+export const Timer = ({ timerProxy }: TimerProps) => {
   const [running, setRunning] = useState(false);
 
   const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
@@ -44,6 +46,11 @@ export const Timer = () => {
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
     timerProxy.on('restarted', syncState);
+    return () => {
+      timerProxy.removeAllListeners('stopped');
+      timerProxy.removeAllListeners('started');
+      timerProxy.removeAllListeners('restarted');
+    }
   }, []);
 
   const restart = () => {
