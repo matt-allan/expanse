@@ -3,22 +3,6 @@ import { Grommet, Box, Button, Clock, Heading, Meter } from 'grommet';
 import { Play, Pause, Resume, Refresh } from "grommet-icons";
 import { TimerState, TimerProxyInterface } from './../timer_proxy';
 
-const DURATION_REGEXP = /P([0-9]+)H([0-9]+)M([0-9]+)S/;
-
-const parseDuration = (duration: string): number => {
-  let match = DURATION_REGEXP.exec(duration);
-
-  if (!match) {
-    throw `Cannot parse '${duration}'`;
-  }
-
-  const hours = parseFloat(match[1]);
-  const minutes = parseFloat(match[2]) || 0;
-  const seconds = parseFloat(match[3]) || 0;
-
-  return (hours * 60 * 60) + (minutes * 60) + seconds;
-};
-
 const interval = (remaining: number): string => {
   const minutes = Math.floor(remaining / 60);
   const seconds = remaining - (minutes * 60);
@@ -46,10 +30,12 @@ export const Timer = ({ timerProxy }: TimerProps) => {
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
     timerProxy.on('restarted', syncState);
+    timerProxy.on('tick', syncState);
     return () => {
       timerProxy.removeAllListeners('stopped');
       timerProxy.removeAllListeners('started');
       timerProxy.removeAllListeners('restarted');
+      timerProxy.removeAllListeners('tick');
     }
   }, []);
 
@@ -83,7 +69,6 @@ export const Timer = ({ timerProxy }: TimerProps) => {
           type="digital"
           time={interval(seconds.remaining)}
           run={!running ? false : 'backward'}
-          onChange={(time: any) => setSeconds({...seconds, remaining: parseDuration(time)})}
           alignSelf="center"
           size="xlarge"
           margin="xlarge"
