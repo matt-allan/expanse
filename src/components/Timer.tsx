@@ -39,6 +39,16 @@ export const Timer = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    timerProxy.on('stopped', () => setRunning(false));
+    timerProxy.on('started', () => setRunning(true));
+    timerProxy.on('restarted', async () => {
+      // todo: get from event
+      setSeconds(await timerProxy.seconds());
+      setRunning(true);
+    });
+  }, []);
+
   const restart = () => {
     setSeconds({
       ...seconds,

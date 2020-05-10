@@ -4,7 +4,7 @@ import { Timer } from './timer';
 export interface TimerProxyInterface {
   running(): Promise<boolean>;
   seconds(): Promise<{seconds: number, remaining: number}>;
-  on(event: string, callback: (event: string) => {}): void;
+  on(event: string, callback: (event: string) => void): void;
   start(): void;
   stop(): void;
   restart(): void;

@@ -13,13 +13,12 @@ let window: BrowserWindow | null = null;
 
 const timer = new Timer(25);
 
-connectTimerProxy(timer, window);
-
 // debug
 timer.on('tick', (seconds: number) => console.log(seconds));
 
 app.on('ready', () => {
   window = createWindow();
+  connectTimerProxy(timer, window);
 
   createTray(timer);
 });
