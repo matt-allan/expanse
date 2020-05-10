@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grommet, Box, Button, Clock, Heading, Meter } from 'grommet';
 import { Play, Pause, Resume, Refresh } from "grommet-icons";
 
 const DURATION_REGEXP = /P([0-9]+)H([0-9]+)M([0-9]+)S/;
-
-const SECONDS_PER_SESSION = 25 * 60;
 
 const timerProxy = window.expanse.timer;
 
@@ -20,22 +18,39 @@ const parseDuration = (duration: string): number => {
     const seconds = parseFloat(match[3]) || 0;
 
     return (hours * 60 * 60) + (minutes * 60) + seconds;
+};
+
+const interval = (remaining: number): string => {
+  const minutes = Math.floor(remaining / 60);
+  const seconds = remaining - (minutes * 60);
+
+  return `PT0H${minutes}M${seconds}S`;
 }
 
 export const Timer = () => {
-  const [paused, setPaused] = useState(true);
+  const [running, setRunning] = useState(false);
 
-  const [secondsLeft, setSecondsLeft] = useState(SECONDS_PER_SESSION);
+  const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
+
+  useEffect(() => {
+    (async () => {
+      setSeconds(await timerProxy.seconds());
+      setRunning(await timerProxy.running());
+    })();
+  }, []);
 
   const restart = () => {
-    setSecondsLeft(SECONDS_PER_SESSION);
-    setPaused(false);
+    setSeconds({
+      ...seconds,
+      remaining: seconds.seconds,
+    });
+    setRunning(true);
     timerProxy.restart();
   };
 
-  const togglePaused = () => {
-    setPaused(!paused);
-    !paused ? timerProxy.pause() : timerProxy.resume();
+  const toggleRunning = () => {
+    setRunning(!running);
+    running ? timerProxy.stop() : timerProxy.start();
   }
 
   return (
@@ -44,17 +59,17 @@ export const Timer = () => {
         <Meter
           type="circle"
           background="light-2"
-          max={SECONDS_PER_SESSION}
-          values={[{ value: secondsLeft }]}
+          max={seconds.seconds}
+          values={[{ value: seconds.remaining }]}
         />
       </Box>
       <Box align="center" justify="center" pad="small">
         <Clock
-          key={secondsLeft == SECONDS_PER_SESSION ? 'restarted' : 'running'}
+          key={seconds.remaining == seconds.seconds ? 'restarted' : 'running'}
           type="digital"
-          time={`PT0H${SECONDS_PER_SESSION / 60}M0S`}
-          run={paused ? false : 'backward'}
-          onChange={(time: any) => setSecondsLeft(parseDuration(time))}
+          time={interval(seconds.remaining)}
+          run={!running ? false : 'backward'}
+          onChange={(time: any) => setSeconds({...seconds, remaining: parseDuration(time)})}
           alignSelf="center"
           size="xlarge"
           margin="xlarge"
@@ -63,7 +78,7 @@ export const Timer = () => {
       </Box>
       <Box direction="row" justify="center" gap="medium" pad={{top: 'small', bottom: 'large'}}>
         <Button plain={true} icon={<Refresh />} onClick={restart} />
-        <Button plain={true} icon={paused ? <Play /> : <Pause />} onClick={togglePaused} />
+        <Button plain={true} icon={running ? <Pause /> : <Play />} onClick={toggleRunning} />
       </Box>
     </React.Fragment>
   );
