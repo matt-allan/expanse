@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Grommet, Box, Button, Clock, Heading, Meter } from 'grommet';
 import { Play, Pause, Resume, Refresh } from "grommet-icons";
+import { TimerState } from './../timer_proxy';
 
 const DURATION_REGEXP = /P([0-9]+)H([0-9]+)M([0-9]+)S/;
 
@@ -32,14 +33,14 @@ export const Timer = () => {
 
   const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
 
-  const syncState = async () => {
-    const { seconds, remaining, running} = await timerProxy.state();
+  const syncState = (state: TimerState) => {
+    const { seconds, remaining, running} = state;
     setSeconds({ seconds, remaining });
     setRunning(running);
   }
 
   useEffect(() => {
-    syncState();
+    timerProxy.state().then((state: TimerState) => syncState(state));
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
     timerProxy.on('restarted', syncState);
