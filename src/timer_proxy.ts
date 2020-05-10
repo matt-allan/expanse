@@ -1,9 +1,14 @@
 import { BrowserWindow, ipcMain, ipcRenderer } from 'electron';
 import { Timer } from './timer';
 
+export interface TimerState {
+  seconds: number,
+  remaining: number, 
+  running: boolean,
+}
+
 export interface TimerProxyInterface {
-  running(): Promise<boolean>;
-  seconds(): Promise<{seconds: number, remaining: number}>;
+  state(): Promise<TimerState>;
   on(event: string, callback: (event: string) => void): void;
   start(): void;
   stop(): void;
@@ -11,11 +16,8 @@ export interface TimerProxyInterface {
 }
 
 export const timerProxy = {
-  seconds: async () => {
-    return ipcRenderer.invoke('timer:seconds');
-  },
-  running: async () => {
-    return ipcRenderer.invoke('timer:running');
+  state: async (): Promise<TimerState> => {
+    return ipcRenderer.invoke('timer:state');
   },
   on: (event: string, callback: (event: string) => {}) => {
     ipcRenderer.on(`timer:${event}`, () => {
@@ -34,14 +36,13 @@ export const timerProxy = {
 };
 
 export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) => {
-  ipcMain.handle('timer:seconds', async () => {
+  ipcMain.handle('timer:state', async (): Promise<TimerState> => {
     return {
       seconds: timer.seconds,
       remaining: timer.remaining,
-    }
+      running: timer.running(),
+    };
   });
-  ipcMain.handle('timer:running', async () => timer.running());
-
   ipcMain.on('timer:start', () => timer.start());
   ipcMain.on('timer:stop', () => timer.stop());
   ipcMain.on('timer:restart', () => timer.restart());
