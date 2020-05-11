@@ -21,7 +21,7 @@ export const Timer = ({ timerProxy }: TimerProps) => {
 
   const syncState = (state: TimerState) => {
     const { seconds, remaining, status} = state;
-    setSeconds({ seconds, remaining });
+    setSeconds({ seconds, remaining })
     setRunning(status == 'started');
   }
 
@@ -30,22 +30,20 @@ export const Timer = ({ timerProxy }: TimerProps) => {
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
     timerProxy.on('restarted', syncState);
+    timerProxy.on('reset', syncState);
     timerProxy.on('tick', syncState);
     return () => {
       timerProxy.removeAllListeners('stopped');
       timerProxy.removeAllListeners('started');
       timerProxy.removeAllListeners('restarted');
+      timerProxy.removeAllListeners('reset');
       timerProxy.removeAllListeners('tick');
     }
   }, []);
 
   const restart = () => {
-    setSeconds({
-      ...seconds,
-      remaining: seconds.seconds,
-    });
-    setRunning(true);
-    timerProxy.restart();
+    // todo: clock won't reset unless I stop it and restart it.
+    timerProxy.reset();
   };
 
   const toggleRunning = () => {
@@ -65,7 +63,7 @@ export const Timer = ({ timerProxy }: TimerProps) => {
       </Box>
       <Box align="center" justify="center" pad="small">
         <Clock
-          key={seconds.remaining == seconds.seconds ? 'restarted' : 'running'}
+          key={seconds.remaining == seconds.seconds ? 'reset' : 'running'}
           type="digital"
           time={interval(seconds.remaining)}
           run={!running ? false : 'backward'}

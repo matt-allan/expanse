@@ -14,6 +14,7 @@ export interface TimerProxyInterface {
   start(): void;
   stop(): void;
   restart(): void;
+  reset(): void;
 }
 
 export const timerProxy = {
@@ -21,7 +22,6 @@ export const timerProxy = {
     return ipcRenderer.invoke('timer:state');
   },
   on: (channel: string, callback: (state: TimerState) => {}) => {
-    // todo: keep a map of callback => listener callback so we can remove subscriptions
     ipcRenderer.on(`timer:on:${channel}`, (event: IpcRendererEvent, state: TimerState) => {
       callback(state);
     });
@@ -38,6 +38,9 @@ export const timerProxy = {
   restart: () => {
     ipcRenderer.send('timer:restart');
   },
+  reset: () => {
+    ipcRenderer.send('timer:reset');
+  },
 };
 
 const getState = (timer: Timer): TimerState => ({
@@ -51,6 +54,7 @@ export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) =>
   ipcMain.on('timer:start', () => timer.start());
   ipcMain.on('timer:stop', () => timer.stop());
   ipcMain.on('timer:restart', () => timer.restart());
+  ipcMain.on('timer:reset', () => timer.reset());
 
   const send = (channel: string) => {
     if (window) {
@@ -62,4 +66,5 @@ export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) =>
   timer.on('stopped', () => send('timer:on:stopped'));
   timer.on('restarted', () => send('timer:on:restarted'));
   timer.on('end', () => send('timer:on:end'));
+  timer.on('reset', () => send('timer:on:reset'));
 }
