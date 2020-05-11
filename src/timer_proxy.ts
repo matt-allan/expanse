@@ -22,7 +22,7 @@ export const timerProxy = {
   },
   on: (channel: string, callback: (state: TimerState) => {}) => {
     // todo: keep a map of callback => listener callback so we can remove subscriptions
-    ipcRenderer.on(`timer:${channel}`, (event: IpcRendererEvent, state: TimerState) => {
+    ipcRenderer.on(`timer:on:${channel}`, (event: IpcRendererEvent, state: TimerState) => {
       callback(state);
     });
   },
@@ -58,8 +58,8 @@ export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) =>
     }
   };
 
-  timer.on('started', () => send('timer:started'));
-  timer.on('stopped', () => send('timer:stopped'));
-  timer.on('restarted', () => send('timer:restarted'));
-  timer.on('end', () => send('timer:end'));
+  timer.on('started', () => send('timer:on:started'));
+  timer.on('stopped', () => send('timer:on:stopped'));
+  timer.on('restarted', () => send('timer:on:restarted'));
+  timer.on('end', () => send('timer:on:end'));
 }
