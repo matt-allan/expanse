@@ -63,14 +63,6 @@ export class Timer extends EventEmitter {
     this.emit('reset');
   }
 
-  restart = (): void => {
-    this.stopTimer();
-    this.remaining = this.seconds;
-    this.startTimer();
-
-    this.emit('restarted');
-  }
-
   end = (): void => {
     this.stopTimer();
 

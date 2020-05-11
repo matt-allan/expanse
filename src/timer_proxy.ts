@@ -1,8 +1,8 @@
 import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
-import { Timer, Status } from './timer';
+import { Timer } from './timer';
 
 export interface TimerState {
-  status: Status,
+  status: 'started' | 'stopped' | 'ended',
   seconds: number,
   remaining: number, 
 }
@@ -13,7 +13,6 @@ export interface TimerProxyInterface {
   removeAllListeners(channel: string): void;
   start(): void;
   stop(): void;
-  restart(): void;
   reset(): void;
 }
 
@@ -35,9 +34,6 @@ export const timerProxy = {
   stop: () => {
     ipcRenderer.send('timer:stop');
   },
-  restart: () => {
-    ipcRenderer.send('timer:restart');
-  },
   reset: () => {
     ipcRenderer.send('timer:reset');
   },
@@ -53,7 +49,6 @@ export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) =>
   ipcMain.handle('timer:state', async (): Promise<TimerState> => getState(timer));
   ipcMain.on('timer:start', () => timer.start());
   ipcMain.on('timer:stop', () => timer.stop());
-  ipcMain.on('timer:restart', () => timer.restart());
   ipcMain.on('timer:reset', () => timer.reset());
 
   const send = (channel: string) => {

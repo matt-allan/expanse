@@ -2,35 +2,59 @@ import React, { useEffect, useState } from "react";
 import { Grommet } from 'grommet';
 
 import { theme } from './../theme';
-import { Timer } from './Timer';
+import { TimerState, TimerProxyInterface } from './../timer_proxy';
 import { Break } from './Break';
+import { Timer } from './Timer';
 
 const timerProxy = window.expanse.timer;
 
 export const App = () => {
-  const [shouldBreak, setShouldBreak] = useState(false);
+
+  const [timerState, setTimerState] = useState<TimerState>({
+    seconds: 0,
+    remaining: 0,
+    status: 'stopped',
+  });
+
+  const syncState = (state: TimerState) => {
+    setTimerState(state);
+  }
 
   useEffect(() => {
-    timerProxy.on('end', () => {
-      // todo: need to sync this state from the main process, so it
-      // still works when end happens while the window is closed
-      setShouldBreak(true);
-    });
+    timerProxy.state().then((state: TimerState) => syncState(state));
+    timerProxy.on('stopped', syncState);
+    timerProxy.on('started', syncState);
+    timerProxy.on('reset', syncState);
+    timerProxy.on('tick', syncState);
+    timerProxy.on('end', syncState);
     return () => {
+      timerProxy.removeAllListeners('stopped');
+      timerProxy.removeAllListeners('started');
+      timerProxy.removeAllListeners('reset');
+      timerProxy.removeAllListeners('tick');
       timerProxy.removeAllListeners('end');
     }
   }, []);
 
   const endBreak = () => {
-    setShouldBreak(false);
-    // todo: restart timer without auto-starting it.
-  }
+    timerProxy.reset();
+  };
+
+  const toggleStart = () => {
+    status == 'started' ? timerProxy.stop() : timerProxy.start();
+  };
+
+  const onReset = () => {
+    timerProxy.reset();
+  };
+
+  const { seconds, remaining, status} = timerState;
 
   return (
     <Grommet theme={theme}> 
-      {shouldBreak ?
-        <Break timerProxy={timerProxy} onEnd={endBreak} /> :
-        <Timer timerProxy={timerProxy} />
+      {status == 'ended' ?
+        <Break onEnd={endBreak} /> :
+        <Timer seconds={seconds} remaining={remaining} status={status} onStart={toggleStart} onStop={toggleStart} onReset={onReset} />
       }
     </Grommet>
   );

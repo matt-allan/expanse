@@ -11,45 +11,15 @@ const interval = (remaining: number): string => {
 }
 
 type TimerProps = {
-  timerProxy: TimerProxyInterface
+  seconds: number,
+  remaining: number,
+  status: 'started' | 'stopped' | 'ended',
+  onStart: () => void,
+  onStop: () => void,
+  onReset: () => void,
 };
 
-export const Timer = ({ timerProxy }: TimerProps) => {
-  const [running, setRunning] = useState(false);
-
-  const [seconds, setSeconds] = useState({seconds: 0, remaining: 0});
-
-  const syncState = (state: TimerState) => {
-    const { seconds, remaining, status} = state;
-    setSeconds({ seconds, remaining })
-    setRunning(status == 'started');
-  }
-
-  useEffect(() => {
-    timerProxy.state().then((state: TimerState) => syncState(state));
-    timerProxy.on('stopped', syncState);
-    timerProxy.on('started', syncState);
-    timerProxy.on('restarted', syncState);
-    timerProxy.on('reset', syncState);
-    timerProxy.on('tick', syncState);
-    return () => {
-      timerProxy.removeAllListeners('stopped');
-      timerProxy.removeAllListeners('started');
-      timerProxy.removeAllListeners('restarted');
-      timerProxy.removeAllListeners('reset');
-      timerProxy.removeAllListeners('tick');
-    }
-  }, []);
-
-  const restart = () => {
-    // todo: clock won't reset unless I stop it and restart it.
-    timerProxy.reset();
-  };
-
-  const toggleRunning = () => {
-    setRunning(!running);
-    running ? timerProxy.stop() : timerProxy.start();
-  }
+export const Timer = ({ seconds, remaining, status, onStart, onStop, onReset }: TimerProps) => {
 
   return (
     <React.Fragment>
@@ -57,16 +27,16 @@ export const Timer = ({ timerProxy }: TimerProps) => {
         <Meter
           type="circle"
           background="light-2"
-          max={seconds.seconds}
-          values={[{ value: seconds.remaining }]}
+          max={seconds}
+          values={[{ value: remaining }]}
         />
       </Box>
       <Box align="center" justify="center" pad="small">
         <Clock
-          key={seconds.remaining == seconds.seconds ? 'reset' : 'running'}
+          key={remaining == seconds ? 'reset' : 'running'}
           type="digital"
-          time={interval(seconds.remaining)}
-          run={!running ? false : 'backward'}
+          time={interval(remaining)}
+          run={status == 'started' ? 'backward' : false}
           alignSelf="center"
           size="xlarge"
           margin="xlarge"
@@ -74,8 +44,8 @@ export const Timer = ({ timerProxy }: TimerProps) => {
         />
       </Box>
       <Box direction="row" justify="center" gap="medium" pad={{top: 'small', bottom: 'large'}}>
-        <Button plain={true} icon={<Refresh />} onClick={restart} />
-        <Button plain={true} icon={running ? <Pause /> : <Play />} onClick={toggleRunning} />
+        <Button plain={true} icon={<Refresh />} onClick={onReset} />
+        <Button plain={true} icon={status == 'started' ? <Pause /> : <Play />} onClick={status == 'started' ? onStart : onStop} />
       </Box>
     </React.Fragment>
   );
