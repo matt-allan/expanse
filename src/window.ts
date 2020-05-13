@@ -7,6 +7,8 @@ declare var MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null;
 
+export { mainWindow };
+
 export const createWindow = (): BrowserWindow => {
   if (mainWindow) {
     return mainWindow;

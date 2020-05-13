@@ -5,6 +5,6 @@ type BreakProps = {
 };
 
 export const Break = ({ onEnd }: BreakProps) => {
-  setTimeout(onEnd, 5000);
+  setTimeout(onEnd, 1000);
   return (<h1>TODO!</h1>);
 };

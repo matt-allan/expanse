@@ -9,16 +9,14 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-let window: BrowserWindow | null = null;
-
 const timer = new Timer(0, 15);
 
 // debug
 timer.on('tick', (seconds: number) => console.log(seconds));
 
 app.on('ready', () => {
-  window = createWindow();
-  connectTimerProxy(timer, window);
+  createWindow();
+  connectTimerProxy(timer);
 
   createTray(timer);
 });
@@ -34,5 +32,5 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  window = createWindow();
+  createWindow();
 });

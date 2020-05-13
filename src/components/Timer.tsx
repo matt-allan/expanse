@@ -16,10 +16,12 @@ type TimerProps = {
   status: 'started' | 'stopped' | 'ended',
   onStart: () => void,
   onStop: () => void,
-  onReset: () => void,
+  onRestart: () => void,
 };
 
-export const Timer = ({ seconds, remaining, status, onStart, onStop, onReset }: TimerProps) => {
+export const Timer = ({ seconds, remaining, status, onStart, onStop, onRestart }: TimerProps) => {
+
+  console.log(seconds, remaining, status);
 
   return (
     <React.Fragment>
@@ -33,7 +35,6 @@ export const Timer = ({ seconds, remaining, status, onStart, onStop, onReset }: 
       </Box>
       <Box align="center" justify="center" pad="small">
         <Clock
-          key={remaining == seconds ? 'reset' : 'running'}
           type="digital"
           time={interval(remaining)}
           run={status == 'started' ? 'backward' : false}
@@ -44,8 +45,8 @@ export const Timer = ({ seconds, remaining, status, onStart, onStop, onReset }: 
         />
       </Box>
       <Box direction="row" justify="center" gap="medium" pad={{top: 'small', bottom: 'large'}}>
-        <Button plain={true} icon={<Refresh />} onClick={onReset} />
-        <Button plain={true} icon={status == 'started' ? <Pause /> : <Play />} onClick={status == 'started' ? onStart : onStop} />
+        <Button plain={true} icon={<Refresh />} onClick={onRestart} />
+        <Button plain={true} icon={status == 'started' ? <Pause /> : <Play />} onClick={status == 'started' ? onStop : onStart} />
       </Box>
     </React.Fragment>
   );

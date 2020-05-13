@@ -1,5 +1,6 @@
 import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
 import { Timer } from './timer';
+import { mainWindow } from './window';
 
 export interface TimerState {
   status: 'started' | 'stopped' | 'ended',
@@ -13,7 +14,7 @@ export interface TimerProxyInterface {
   removeAllListeners(channel: string): void;
   start(): void;
   stop(): void;
-  reset(): void;
+  restart(): void;
 }
 
 export const timerProxy = {
@@ -34,8 +35,8 @@ export const timerProxy = {
   stop: () => {
     ipcRenderer.send('timer:stop');
   },
-  reset: () => {
-    ipcRenderer.send('timer:reset');
+  restart: () => {
+    ipcRenderer.send('timer:restart');
   },
 };
 
@@ -45,21 +46,20 @@ const getState = (timer: Timer): TimerState => ({
   remaining: timer.remaining,
 });
 
-export const connectTimerProxy = (timer: Timer, window: BrowserWindow | null) => {
+export const connectTimerProxy = (timer: Timer) => {
   ipcMain.handle('timer:state', async (): Promise<TimerState> => getState(timer));
   ipcMain.on('timer:start', () => timer.start());
   ipcMain.on('timer:stop', () => timer.stop());
-  ipcMain.on('timer:reset', () => timer.reset());
+  ipcMain.on('timer:restart', () => timer.restart());
 
   const send = (channel: string) => {
-    if (window) {
-      window.webContents.send(channel, getState(timer));
+    if (mainWindow) {
+      mainWindow.webContents.send(channel, getState(timer));
     }
   };
 
   timer.on('started', () => send('timer:on:started'));
   timer.on('stopped', () => send('timer:on:stopped'));
-  timer.on('restarted', () => send('timer:on:restarted'));
   timer.on('end', () => send('timer:on:end'));
-  timer.on('reset', () => send('timer:on:reset'));
+  timer.on('restart', () => send('timer:on:restart'));
 }

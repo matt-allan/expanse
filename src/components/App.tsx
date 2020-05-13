@@ -24,37 +24,34 @@ export const App = () => {
     timerProxy.state().then((state: TimerState) => syncState(state));
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
-    timerProxy.on('reset', syncState);
+    timerProxy.on('restart', syncState);
     timerProxy.on('tick', syncState);
     timerProxy.on('end', syncState);
     return () => {
       timerProxy.removeAllListeners('stopped');
       timerProxy.removeAllListeners('started');
-      timerProxy.removeAllListeners('reset');
+      timerProxy.removeAllListeners('restart');
       timerProxy.removeAllListeners('tick');
       timerProxy.removeAllListeners('end');
     }
   }, []);
 
-  const endBreak = () => {
-    timerProxy.reset();
-  };
+  const endBreak = () => timerProxy.restart();
 
-  const toggleStart = () => {
-    status == 'started' ? timerProxy.stop() : timerProxy.start();
-  };
-
-  const onReset = () => {
-    timerProxy.reset();
-  };
-
-  const { seconds, remaining, status} = timerState;
+  const { seconds, remaining, status } = timerState;
 
   return (
-    <Grommet theme={theme}> 
+    <Grommet theme={theme}>
       {status == 'ended' ?
         <Break onEnd={endBreak} /> :
-        <Timer seconds={seconds} remaining={remaining} status={status} onStart={toggleStart} onStop={toggleStart} onReset={onReset} />
+        <Timer
+          seconds={seconds}
+          remaining={remaining}
+          status={status}
+          onStart={() => timerProxy.start()}
+          onStop={() => timerProxy.stop()}
+          onRestart={() => timerProxy.restart()}
+        />
       }
     </Grommet>
   );
