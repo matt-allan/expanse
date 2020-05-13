@@ -8,6 +8,14 @@ import { Timer } from './Timer';
 
 const timerProxy = window.expanse.timer;
 
+const channels = [
+  'started',
+  'stopped',
+  'restarted',
+  'tick',
+  'ended',
+];
+
 export const App = () => {
 
   const [timerState, setTimerState] = useState<TimerState>({
@@ -21,18 +29,14 @@ export const App = () => {
   }
 
   useEffect(() => {
-    timerProxy.state().then((state: TimerState) => syncState(state));
-    timerProxy.on('stopped', syncState);
-    timerProxy.on('started', syncState);
-    timerProxy.on('restarted', syncState);
-    timerProxy.on('tick', syncState);
-    timerProxy.on('ended', syncState);
+    timerProxy.state().then((state: TimerState) => syncState(state));    
+    for (const channel of channels) {
+      timerProxy.on(channel, syncState);
+    }
     return () => {
-      timerProxy.removeAllListeners('stopped');
-      timerProxy.removeAllListeners('started');
-      timerProxy.removeAllListeners('restarted');
-      timerProxy.removeAllListeners('tick');
-      timerProxy.removeAllListeners('ended');
+      for (const channel of channels) {
+        timerProxy.removeAllListeners(channel);
+      }
     }
   }, []);
 

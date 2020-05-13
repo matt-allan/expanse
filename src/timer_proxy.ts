@@ -8,6 +8,14 @@ export interface TimerState {
   remaining: number, 
 }
 
+const channels = [
+  'started',
+  'stopped',
+  'restarted',
+  'tick',
+  'ended',
+];
+
 export interface TimerProxyInterface {
   state(): Promise<TimerState>;
   on(channel: string, callback: (state: TimerState) => void): void;
@@ -58,9 +66,7 @@ export const connectTimerProxy = (timer: Timer) => {
     }
   };
 
-  timer.on('started', () => send('timer:on:started'));
-  timer.on('stopped', () => send('timer:on:stopped'));
-  timer.on('restarted', () => send('timer:on:restarted'));
-  timer.on('ended', () => send('timer:on:ended'));
-  timer.on('tick', () => send('timer:on:tick'));
+  for (const channel of channels) {
+    timer.on(channel, () => send(`timer:on:${channel}`));
+  }
 }
