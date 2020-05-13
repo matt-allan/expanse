@@ -60,7 +60,7 @@ export class Timer extends EventEmitter {
     
     this.start();
 
-    this.emit('restart');
+    this.emit('restarted');
   }
 
   end = (): void => {
@@ -68,7 +68,7 @@ export class Timer extends EventEmitter {
 
     this.status = Status.Ended;
 
-    this.emit('end');
+    this.emit('ended');
   }
 
   startTimer = (): void => {

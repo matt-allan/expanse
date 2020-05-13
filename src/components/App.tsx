@@ -24,15 +24,15 @@ export const App = () => {
     timerProxy.state().then((state: TimerState) => syncState(state));
     timerProxy.on('stopped', syncState);
     timerProxy.on('started', syncState);
-    timerProxy.on('restart', syncState);
+    timerProxy.on('restarted', syncState);
     timerProxy.on('tick', syncState);
-    timerProxy.on('end', syncState);
+    timerProxy.on('ended', syncState);
     return () => {
       timerProxy.removeAllListeners('stopped');
       timerProxy.removeAllListeners('started');
-      timerProxy.removeAllListeners('restart');
+      timerProxy.removeAllListeners('restarted');
       timerProxy.removeAllListeners('tick');
-      timerProxy.removeAllListeners('end');
+      timerProxy.removeAllListeners('ended');
     }
   }, []);
 

@@ -60,7 +60,7 @@ export const connectTimerProxy = (timer: Timer) => {
 
   timer.on('started', () => send('timer:on:started'));
   timer.on('stopped', () => send('timer:on:stopped'));
-  timer.on('restart', () => send('timer:on:restart'));
-  timer.on('end', () => send('timer:on:end'));
+  timer.on('restarted', () => send('timer:on:restarted'));
+  timer.on('ended', () => send('timer:on:ended'));
   timer.on('tick', () => send('timer:on:tick'));
 }
