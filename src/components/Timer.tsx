@@ -20,9 +20,6 @@ type TimerProps = {
 };
 
 export const Timer = ({ seconds, remaining, status, onStart, onStop, onRestart }: TimerProps) => {
-
-  console.log(seconds, remaining, status);
-
   return (
     <React.Fragment>
       <Box align="center" justify="center" pad={{ top: 'large', bottom: 'small'}}>
