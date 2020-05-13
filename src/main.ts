@@ -9,7 +9,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const timer = new Timer(0, 15);
+const timer = new Timer(0, 5);
 
 // debug
 timer.on('tick', (seconds: number) => console.log(seconds));

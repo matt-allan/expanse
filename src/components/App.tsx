@@ -18,6 +18,8 @@ const channels = [
 
 export const App = () => {
 
+  const [shouldBreak, setShouldBreak] = useState<boolean>(false);
+
   const [timerState, setTimerState] = useState<TimerState>({
     seconds: 0,
     remaining: 0,
@@ -30,9 +32,13 @@ export const App = () => {
 
   useEffect(() => {
     timerProxy.state().then((state: TimerState) => syncState(state));    
+
     for (const channel of channels) {
       timerProxy.on(channel, syncState);
     }
+
+    timerProxy.on('ended', () => setShouldBreak(true));
+
     return () => {
       for (const channel of channels) {
         timerProxy.removeAllListeners(channel);
@@ -40,13 +46,16 @@ export const App = () => {
     }
   }, []);
 
-  const endBreak = () => timerProxy.restart();
+  const endBreak = () => {
+    setShouldBreak(false);
+    timerProxy.restart();
+  }
 
   const { seconds, remaining, status } = timerState;
 
   return (
     <Grommet theme={theme}>
-      {status == 'ended' ?
+      {shouldBreak ?
         <Break onEnd={endBreak} /> :
         <Timer
           seconds={seconds}
