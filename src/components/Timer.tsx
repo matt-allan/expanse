@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Grommet, Box, Button, Clock, Heading, Meter } from 'grommet';
 import { Play, Pause, Resume, Refresh } from "grommet-icons";
-import { TimerState, TimerProxyInterface } from './../timer_proxy';
 
 const interval = (remaining: number): string => {
   const minutes = Math.floor(remaining / 60);

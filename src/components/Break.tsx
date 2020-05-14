@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Image } from 'grommet';
 
-const browserWindowProxy = window.expanse.browserWindow;
+const browserWindow = window.expanse.browserWindow;
 
 type BreakProps = {
   onEnd: () => void;
@@ -10,10 +10,9 @@ type BreakProps = {
 export const Break = ({ onEnd }: BreakProps) => {
 
   useEffect(() => {
-    browserWindowProxy.setFullscreen(true);
-    return () => {
-      browserWindowProxy.setFullscreen(false);
-    }
+    browserWindow.setFullscreen(true);
+    
+    return () => browserWindow.setFullscreen(false);
   }, []);
 
   return (

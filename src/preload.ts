@@ -1,11 +1,21 @@
 import { contextBridge } from 'electron';
-import { timerProxy } from './timer_proxy';
-import { browserWindowProxy } from './window_proxy';
+
+import { timer, TimerProxy } from './timer_proxy';
+import { browserWindow, BrowserWindowProxy } from './window_proxy';
+
+declare global {
+  interface Window {
+    expanse: {
+      timer: TimerProxy,
+      browserWindow: BrowserWindowProxy,
+    }
+  }
+}
 
 contextBridge.exposeInMainWorld(
   'expanse',
   {
-    timer: timerProxy,
-    browserWindow: browserWindowProxy,
+    timer: timer,
+    browserWindow: browserWindow,
   }
-)
+);

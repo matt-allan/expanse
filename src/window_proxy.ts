@@ -2,11 +2,11 @@ import { BrowserWindow, ipcMain, ipcRenderer, IpcMainInvokeEvent } from 'electro
 
 import { mainWindow } from './window';
 
-export interface BrowserWindowProxyInterface {
+export interface BrowserWindowProxy {
   setFullscreen(flag: boolean): void
 }
 
-export const browserWindowProxy = {
+export const browserWindow = {
   setFullscreen: (flag: boolean): void => {
     ipcRenderer.invoke('browserWindow:setFullscreen', flag);
   },

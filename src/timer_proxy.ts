@@ -17,7 +17,7 @@ const channels = [
   'ended',
 ];
 
-export interface TimerProxyInterface {
+export interface TimerProxy {
   state(): Promise<TimerState>;
   on(channel: string, callback: (state: TimerState) => void): void;
   removeAllListeners(channel: string): void;
@@ -26,7 +26,7 @@ export interface TimerProxyInterface {
   restart(): void;
 }
 
-export const timerProxy = {
+export const timer = {
   state: async (): Promise<TimerState> => {
     return ipcRenderer.invoke('timer:state');
   },

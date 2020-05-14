@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Grommet } from 'grommet';
 
 import { theme } from './../theme';
-import { TimerState, TimerProxyInterface } from './../timer_proxy';
+import { TimerState } from './../timer_proxy';
 import { Break } from './Break';
 import { Timer } from './Timer';
 
