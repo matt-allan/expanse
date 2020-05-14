@@ -3,6 +3,7 @@ import { createTray } from './tray';
 import { createWindow } from './window';
 import { Timer } from './timer';
 import { connectTimerProxy } from './timer_proxy';
+import { connectBrowserWindowProxy } from './window_proxy';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -17,6 +18,7 @@ timer.on('tick', (seconds: number) => console.log(seconds));
 app.on('ready', () => {
   createWindow();
   connectTimerProxy(timer);
+  connectBrowserWindowProxy();
 
   createTray(timer);
 });

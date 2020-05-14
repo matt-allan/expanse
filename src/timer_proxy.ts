@@ -1,4 +1,5 @@
 import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
+
 import { Timer } from './timer';
 import { mainWindow } from './window';
 
