@@ -3,18 +3,11 @@ import { Grommet } from 'grommet';
 
 import { theme } from './../theme';
 import { TimerState } from './../timer_proxy';
+import { events, Event, statuses, Status } from './../timer_types';
 import { Break } from './Break';
 import { Timer } from './Timer';
 
 const timerProxy = window.expanse.timer;
-
-const channels = [
-  'started',
-  'stopped',
-  'restarted',
-  'tick',
-  'ended',
-];
 
 export const App = () => {
 
@@ -23,7 +16,7 @@ export const App = () => {
   const [timerState, setTimerState] = useState<TimerState>({
     seconds: 0,
     remaining: 0,
-    status: 'stopped',
+    status: Status.Stopped,
   });
 
   const syncState = (state: TimerState) => {
@@ -33,15 +26,15 @@ export const App = () => {
   useEffect(() => {
     timerProxy.state().then((state: TimerState) => syncState(state));    
 
-    for (const channel of channels) {
-      timerProxy.on(channel, syncState);
+    for (const event of events) {
+      timerProxy.on(event, syncState);
     }
 
-    timerProxy.on('ended', () => setShouldBreak(true));
+    timerProxy.on(Event.Ended, () => setShouldBreak(true));
 
     return () => {
-      for (const channel of channels) {
-        timerProxy.removeAllListeners(channel);
+      for (const event of events) {
+        timerProxy.removeAllListeners(event);
       }
     }
   }, []);

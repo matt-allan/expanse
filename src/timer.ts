@@ -1,10 +1,7 @@
 import { EventEmitter } from 'events';
+import { Event, Status } from './timer_types';
 
-export enum Status {
- Started = 'started',
- Stopped = 'stopped',
- Ended = 'ended',
-}
+export { Event, Status };
 
 export class Timer extends EventEmitter {
   seconds: number;
@@ -35,7 +32,7 @@ export class Timer extends EventEmitter {
 
     this.status = Status.Started;
 
-    this.emit('started');
+    this.emit(Event.Started);
   }
 
   stop = (): void => {
@@ -48,7 +45,7 @@ export class Timer extends EventEmitter {
 
     this.status = Status.Stopped;
 
-    this.emit('stopped');
+    this.emit(Event.Stopped);
   }
 
   restart = (): void => {    
@@ -60,7 +57,7 @@ export class Timer extends EventEmitter {
     
     this.start();
 
-    this.emit('restarted');
+    this.emit(Event.Restarted);
   }
 
   end = (): void => {
@@ -68,12 +65,12 @@ export class Timer extends EventEmitter {
 
     this.status = Status.Ended;
 
-    this.emit('ended');
+    this.emit(Event.Ended);
   }
 
   startTimer = (): void => {
     this.timer = setInterval(() => {
-      this.emit('tick', --this.remaining);
+      this.emit(Event.Tick, --this.remaining);
       if (this.remaining == 0) {
         this.end();
       }

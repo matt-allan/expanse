@@ -1,6 +1,6 @@
 import { app, Menu, Tray } from 'electron';
 import { createWindow } from './window';
-import { Timer, Status } from './timer';
+import { Event, Status, Timer } from './timer';
 
 // Keep a global reference of the tray object, if you don't, the tray will
 // be removed automatically when the JavaScript object is garbage collected.
@@ -55,22 +55,22 @@ export const createTray = (timer: Timer) => {
 
   tray.setContextMenu(menu);
 
-  timer.on('tick', () => {
+  timer.on(Event.Tick, () => {
     // todo (optimization): only set when it actually changes
     tray!.setImage(trayImage(timer));
   });
 
-  timer.on('started', () => {
+  timer.on(Event.Started, () => {
     menu.getMenuItemById('start').visible = false;
     menu.getMenuItemById('stop').visible = true;
   });
 
-  timer.on('stopped', () => {
+  timer.on(Event.Stopped, () => {
     menu.getMenuItemById('start').visible = true;
     menu.getMenuItemById('stop').visible = false;
   });
 
-  timer.on('restarted', () => {
+  timer.on(Event.Restarted, () => {
     menu.getMenuItemById('start').visible = false;
     menu.getMenuItemById('stop').visible = true;
   });

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { createTray } from './tray';
 import { createWindow } from './window';
-import { Timer } from './timer';
+import { Event, Timer } from './timer';
 import { connectTimerProxy } from './timer_proxy';
 import { connectBrowserWindowProxy } from './window_proxy';
 
@@ -13,7 +13,7 @@ if (require('electron-squirrel-startup')) {
 const timer = new Timer(0, 5);
 
 // debug
-timer.on('tick', (seconds: number) => console.log(seconds));
+timer.on(Event.Tick, (seconds: number) => console.log(seconds));
 
 app.on('ready', () => {
   createWindow();

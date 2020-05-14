@@ -10,9 +10,9 @@ type BreakProps = {
 export const Break = ({ onEnd }: BreakProps) => {
 
   useEffect(() => {
-    browserWindow.setFullscreen(true);
+    browserWindow.setFullScreen(true);
     
-    return () => browserWindow.setFullscreen(false);
+    return () => browserWindow.setFullScreen(false);
   }, []);
 
   return (

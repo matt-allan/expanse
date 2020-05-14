@@ -1,21 +1,26 @@
 import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
 
 import { Timer } from './timer';
+import { events, Event, Status } from './timer_types';
 import { mainWindow } from './window';
 
 export interface TimerState {
-  status: 'started' | 'stopped' | 'ended',
+  status: Status,
   seconds: number,
   remaining: number, 
 }
 
-const channels = [
-  'started',
-  'stopped',
-  'restarted',
-  'tick',
-  'ended',
-];
+enum Channel {
+  State = 'state',
+  Start = 'start',
+  Stop = 'stop',
+  Restart = 'restart',
+  On = 'on',
+}
+
+const prefixChannel = (channel: Channel) => `timer:${channel}`;
+
+const prefixEvent = (event: string) => `${prefixChannel(Channel.On)}:${event}`;
 
 export interface TimerProxy {
   state(): Promise<TimerState>;
@@ -28,24 +33,24 @@ export interface TimerProxy {
 
 export const timer = {
   state: async (): Promise<TimerState> => {
-    return ipcRenderer.invoke('timer:state');
+    return ipcRenderer.invoke(prefixChannel(Channel.State));
   },
-  on: (channel: string, callback: (state: TimerState) => {}) => {
-    ipcRenderer.on(`timer:on:${channel}`, (event: IpcRendererEvent, state: TimerState) => {
+  on: (event: string, callback: (state: TimerState) => {}) => {
+    ipcRenderer.on(prefixEvent(event), (event: IpcRendererEvent, state: TimerState) => {
       callback(state);
     });
   },
-  removeAllListeners: (channel: string) => {
-    ipcRenderer.removeAllListeners(channel);
+  removeAllListeners: (event: string) => {
+    ipcRenderer.removeAllListeners(event);
   },
   start: () => {
-    ipcRenderer.send('timer:start');
+    ipcRenderer.send(prefixChannel(Channel.Start));
   },
   stop: () => {
-    ipcRenderer.send('timer:stop');
+    ipcRenderer.send(prefixChannel(Channel.Stop));
   },
   restart: () => {
-    ipcRenderer.send('timer:restart');
+    ipcRenderer.send(prefixChannel(Channel.Restart));
   },
 };
 
@@ -56,10 +61,10 @@ const getState = (timer: Timer): TimerState => ({
 });
 
 export const connectTimerProxy = (timer: Timer) => {
-  ipcMain.handle('timer:state', async (): Promise<TimerState> => getState(timer));
-  ipcMain.on('timer:start', () => timer.start());
-  ipcMain.on('timer:stop', () => timer.stop());
-  ipcMain.on('timer:restart', () => timer.restart());
+  ipcMain.handle(prefixChannel(Channel.State), async (): Promise<TimerState> => getState(timer));
+  ipcMain.on(prefixChannel(Channel.Start), () => timer.start());
+  ipcMain.on(prefixChannel(Channel.Stop), () => timer.stop());
+  ipcMain.on(prefixChannel(Channel.Restart), () => timer.restart());
 
   const send = (channel: string) => {
     if (mainWindow) {
@@ -67,7 +72,7 @@ export const connectTimerProxy = (timer: Timer) => {
     }
   };
 
-  for (const channel of channels) {
-    timer.on(channel, () => send(`timer:on:${channel}`));
+  for (const event of events) {
+    timer.on(event, () => send(prefixEvent(event)));
   }
 }
