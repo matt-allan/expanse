@@ -24,7 +24,12 @@ export const App = () => {
   }
 
   useEffect(() => {
-    timerProxy.state().then((state: TimerState) => syncState(state));    
+    timerProxy.state().then((state: TimerState) => {
+      syncState(state);
+      if (state.status == Status.Ended) {
+        setShouldBreak(true);
+      }
+    });
 
     for (const event of events) {
       timerProxy.on(event, syncState);

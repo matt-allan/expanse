@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { createTray } from './tray';
-import { createWindow } from './window';
+import { createWindow, connectWindow } from './window';
 import { Event, Timer } from './timer';
 import { connectTimerProxy } from './timer_proxy';
 import { connectBrowserWindowProxy } from './window_proxy';
@@ -17,6 +17,7 @@ timer.on(Event.Tick, (seconds: number) => console.log(seconds));
 
 app.on('ready', () => {
   createWindow();
+  connectWindow(timer);
   connectTimerProxy(timer);
   connectBrowserWindowProxy();
 
