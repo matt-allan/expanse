@@ -6,13 +6,13 @@ import { Event, Status, Timer } from './timer';
 // be removed automatically when the JavaScript object is garbage collected.
 let tray: Tray | null;
 
-const trayImage = (timer: Timer) => {
-  let eighths = Math.round((timer.remaining / timer.seconds) * 8);
+const calcEighths = (timer: Timer) => {
+  const eighths = Math.round((timer.remaining / timer.seconds) * 8);
 
-  eighths = eighths > 0 ? eighths : 8;
-
-  return `./resources/img/menubar/${eighths}-8/menubar-iconTemplate.png`;
+  return eighths > 0 ? eighths : 8;
 };
+
+const trayImage = (eighths: number) => `./resources/img/menubar/${eighths}-8/menubar-iconTemplate.png`;
 
 const contextMenu = (timer: Timer): Menu => {
   return Menu.buildFromTemplate([
@@ -46,15 +46,22 @@ const contextMenu = (timer: Timer): Menu => {
 };
 
 export const createTray = (timer: Timer) => {
-  tray = new Tray(trayImage(timer));
+  let eighths = calcEighths(timer);
+
+  tray = new Tray(trayImage(eighths));
 
   const menu = contextMenu(timer);
 
   tray.setContextMenu(menu);
 
   timer.on(Event.Tick, () => {
-    // todo (optimization): only set when it actually changes
-    tray!.setImage(trayImage(timer));
+    let lastEighths = eighths;
+
+    eighths = calcEighths(timer);
+
+    if (eighths !== lastEighths) {
+      tray!.setImage(trayImage(eighths));
+    }
   });
 
   timer.on(Event.Started, () => {
