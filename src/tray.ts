@@ -54,7 +54,7 @@ export const createTray = (timer: Timer) => {
 
   tray.setContextMenu(menu);
 
-  timer.on(Event.Tick, () => {
+  const updateTrayImage = () => {
     let lastEighths = eighths;
 
     eighths = calcEighths(timer);
@@ -62,7 +62,10 @@ export const createTray = (timer: Timer) => {
     if (eighths !== lastEighths) {
       tray!.setImage(trayImage(eighths));
     }
-  });
+  };
+
+  timer.on(Event.Tick, updateTrayImage);
+  timer.on(Event.Restarted, updateTrayImage);
 
   timer.on(Event.Started, () => {
     menu.getMenuItemById('start').visible = false;
