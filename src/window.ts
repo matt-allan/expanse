@@ -1,6 +1,6 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow } from "electron";
 
-import { Event, Timer } from './timer';
+import { Event, Timer } from "./timer";
 
 declare var MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare var MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -17,7 +17,7 @@ export const createWindow = (): BrowserWindow => {
   }
 
   mainWindow = new BrowserWindow({
-    titleBarStyle: 'hidden',
+    titleBarStyle: "hidden",
     width: 600,
     height: 640,
     webPreferences: {
@@ -26,12 +26,12 @@ export const createWindow = (): BrowserWindow => {
       contextIsolation: true,
       enableRemoteModule: false,
       nodeIntegration: false,
-    }
+    },
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
 
-  mainWindow.on('closed', () => {
+  mainWindow.on("closed", () => {
     mainWindow = null;
   });
 
@@ -42,7 +42,7 @@ export const connectWindow = (timer: Timer) => {
   timer.on(Event.Ended, () => {
     createWindow();
     if (!mainWindow) {
-      console.error('could not create window');
+      console.error("could not create window");
       return;
     }
 
@@ -50,4 +50,4 @@ export const connectWindow = (timer: Timer) => {
       mainWindow.show();
     }
   });
-}
+};

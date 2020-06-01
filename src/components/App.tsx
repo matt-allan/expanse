@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Grommet } from 'grommet';
+import { Grommet } from "grommet";
 
-import { theme } from './../theme';
-import { TimerState } from './../timer_proxy';
-import { events, Event, statuses, Status } from './../timer_types';
-import { Break } from './Break';
-import { Timer } from './Timer';
+import { theme } from "./../theme";
+import { TimerState } from "./../timer_proxy";
+import { events, Event, statuses, Status } from "./../timer_types";
+import { Break } from "./Break";
+import { Timer } from "./Timer";
 
 const timerProxy = window.expanse.timer;
 
 export const App = () => {
-
   const [shouldBreak, setShouldBreak] = useState<boolean>(false);
 
   const [timerState, setTimerState] = useState<TimerState>({
@@ -21,7 +20,7 @@ export const App = () => {
 
   const syncState = (state: TimerState) => {
     setTimerState(state);
-  }
+  };
 
   useEffect(() => {
     timerProxy.state().then((state: TimerState) => {
@@ -41,20 +40,21 @@ export const App = () => {
       for (const event of events) {
         timerProxy.removeAllListeners(event);
       }
-    }
+    };
   }, []);
 
   const endBreak = () => {
     setShouldBreak(false);
     timerProxy.restart();
-  }
+  };
 
   const { seconds, remaining, status } = timerState;
 
   return (
     <Grommet theme={theme}>
-      {shouldBreak ?
-        <Break onEnd={endBreak} /> :
+      {shouldBreak ? (
+        <Break onEnd={endBreak} />
+      ) : (
         <Timer
           seconds={seconds}
           remaining={remaining}
@@ -63,7 +63,7 @@ export const App = () => {
           onStop={() => timerProxy.stop()}
           onRestart={() => timerProxy.restart()}
         />
-      }
+      )}
     </Grommet>
   );
-}
+};

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { defaultProps, Button } from 'grommet';
+import React, { useEffect, useState } from "react";
+import styled, { keyframes } from "styled-components";
+import { defaultProps, Button } from "grommet";
 
 // Only undefined if you overwrite the theme
 // and dont use the deepMerge function.
@@ -43,11 +43,11 @@ const Circle = styled.div`
   mix-blend-mode: screen;
 
   &:nth-child(odd) {
-    background: ${colors['accent-1']};
+    background: ${colors["accent-1"]};
   }
 
   &:nth-child(even) {
-    background: ${colors['accent-3']};
+    background: ${colors["accent-3"]};
   }
 
   &:nth-child(1) {
@@ -89,7 +89,7 @@ export const Breathe = ({ onEnd }: BreatheProps) => {
   }, []);
 
   if (finished) {
-    return (<Button primary label="Back to work" onClick={onEnd} />);
+    return <Button primary label="Back to work" onClick={onEnd} />;
   }
 
   return (

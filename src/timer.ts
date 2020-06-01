@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
-import { Event, Status } from './timer_types';
+import { EventEmitter } from "events";
+import { Event, Status } from "./timer_types";
 
 export { Event, Status };
 
@@ -15,7 +15,7 @@ export class Timer extends EventEmitter {
   constructor(minutes: number, seconds?: number) {
     super();
 
-    this.seconds = (minutes * 60) + (seconds || 0);
+    this.seconds = minutes * 60 + (seconds || 0);
 
     this.remaining = this.seconds;
 
@@ -24,7 +24,7 @@ export class Timer extends EventEmitter {
 
   start = (): void => {
     if (this.status == Status.Started) {
-      console.error('Cannot start a started timer');
+      console.error("Cannot start a started timer");
       return;
     }
 
@@ -33,11 +33,11 @@ export class Timer extends EventEmitter {
     this.status = Status.Started;
 
     this.emit(Event.Started);
-  }
+  };
 
   stop = (): void => {
     if (this.status != Status.Started) {
-      console.error('Cannot stop a not started timer');
+      console.error("Cannot stop a not started timer");
       return;
     }
 
@@ -46,19 +46,19 @@ export class Timer extends EventEmitter {
     this.status = Status.Stopped;
 
     this.emit(Event.Stopped);
-  }
+  };
 
-  restart = (): void => {    
+  restart = (): void => {
     if (this.status == Status.Started) {
       this.stop();
     }
 
     this.remaining = this.seconds;
-    
+
     this.start();
 
     this.emit(Event.Restarted);
-  }
+  };
 
   end = (): void => {
     this.stopTimer();
@@ -66,7 +66,7 @@ export class Timer extends EventEmitter {
     this.status = Status.Ended;
 
     this.emit(Event.Ended);
-  }
+  };
 
   startTimer = (): void => {
     this.timer = setInterval(() => {
@@ -75,7 +75,7 @@ export class Timer extends EventEmitter {
         this.end();
       }
     }, 1000);
-  }
+  };
 
   stopTimer = (): void => {
     if (this.timer) {
@@ -83,5 +83,5 @@ export class Timer extends EventEmitter {
     }
 
     this.timer = undefined;
-  }
+  };
 }

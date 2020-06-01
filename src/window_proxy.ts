@@ -1,13 +1,18 @@
-import { BrowserWindow, ipcMain, ipcRenderer, IpcMainInvokeEvent } from 'electron';
+import {
+  BrowserWindow,
+  ipcMain,
+  ipcRenderer,
+  IpcMainInvokeEvent,
+} from "electron";
 
-import { mainWindow } from './window';
+import { mainWindow } from "./window";
 
 enum Channel {
-  SetFullScreen = 'setFullScreen',
+  SetFullScreen = "setFullScreen",
 }
 
 export interface BrowserWindowProxy {
-  setFullScreen(flag: boolean): void
+  setFullScreen(flag: boolean): void;
 }
 
 const prefixChannel = (channel: Channel) => `browserWindow:${channel}`;
@@ -19,9 +24,12 @@ export const browserWindow = {
 };
 
 export const connectBrowserWindowProxy = () => {
-  ipcMain.handle(prefixChannel(Channel.SetFullScreen), (event: IpcMainInvokeEvent, flag: boolean): void => {
-    if (mainWindow) {
-      mainWindow.setFullScreen(flag);
+  ipcMain.handle(
+    prefixChannel(Channel.SetFullScreen),
+    (event: IpcMainInvokeEvent, flag: boolean): void => {
+      if (mainWindow) {
+        mainWindow.setFullScreen(flag);
+      }
     }
-  });
+  );
 };

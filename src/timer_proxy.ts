@@ -1,21 +1,26 @@
-import { BrowserWindow, ipcMain, ipcRenderer, IpcRendererEvent } from 'electron';
+import {
+  BrowserWindow,
+  ipcMain,
+  ipcRenderer,
+  IpcRendererEvent,
+} from "electron";
 
-import { Timer } from './timer';
-import { events, Event, Status } from './timer_types';
-import { mainWindow } from './window';
+import { Timer } from "./timer";
+import { events, Event, Status } from "./timer_types";
+import { mainWindow } from "./window";
 
 export interface TimerState {
-  status: Status,
-  seconds: number,
-  remaining: number, 
+  status: Status;
+  seconds: number;
+  remaining: number;
 }
 
 enum Channel {
-  State = 'state',
-  Start = 'start',
-  Stop = 'stop',
-  Restart = 'restart',
-  On = 'on',
+  State = "state",
+  Start = "start",
+  Stop = "stop",
+  Restart = "restart",
+  On = "on",
 }
 
 const prefixChannel = (channel: Channel) => `timer:${channel}`;
@@ -36,9 +41,12 @@ export const timer = {
     return ipcRenderer.invoke(prefixChannel(Channel.State));
   },
   on: (event: string, callback: (state: TimerState) => {}) => {
-    ipcRenderer.on(prefixEvent(event), (event: IpcRendererEvent, state: TimerState) => {
-      callback(state);
-    });
+    ipcRenderer.on(
+      prefixEvent(event),
+      (event: IpcRendererEvent, state: TimerState) => {
+        callback(state);
+      }
+    );
   },
   removeAllListeners: (event: string) => {
     ipcRenderer.removeAllListeners(event);
@@ -61,7 +69,10 @@ const getState = (timer: Timer): TimerState => ({
 });
 
 export const connectTimerProxy = (timer: Timer) => {
-  ipcMain.handle(prefixChannel(Channel.State), async (): Promise<TimerState> => getState(timer));
+  ipcMain.handle(
+    prefixChannel(Channel.State),
+    async (): Promise<TimerState> => getState(timer)
+  );
   ipcMain.on(prefixChannel(Channel.Start), () => timer.start());
   ipcMain.on(prefixChannel(Channel.Stop), () => timer.stop());
   ipcMain.on(prefixChannel(Channel.Restart), () => timer.restart());
@@ -75,4 +86,4 @@ export const connectTimerProxy = (timer: Timer) => {
   for (const event of events) {
     timer.on(event, () => send(prefixEvent(event)));
   }
-}
+};
