@@ -1,12 +1,11 @@
 import {
-  BrowserWindow,
   ipcMain,
   ipcRenderer,
   IpcRendererEvent,
 } from "electron";
 
 import { Timer } from "./timer";
-import { events, Event, Status } from "./timer_types";
+import { events, Status } from "./timer_types";
 import { mainWindow } from "./window";
 
 export interface TimerState {
@@ -40,7 +39,7 @@ export const timer = {
   state: async (): Promise<TimerState> => {
     return ipcRenderer.invoke(prefixChannel(Channel.State));
   },
-  on: (event: string, callback: (state: TimerState) => {}) => {
+  on: (event: string, callback: (state: TimerState) => void): void => {
     ipcRenderer.on(
       prefixEvent(event),
       (event: IpcRendererEvent, state: TimerState) => {
@@ -48,16 +47,16 @@ export const timer = {
       }
     );
   },
-  removeAllListeners: (event: string) => {
+  removeAllListeners: (event: string): void => {
     ipcRenderer.removeAllListeners(event);
   },
-  start: () => {
+  start: (): void => {
     ipcRenderer.send(prefixChannel(Channel.Start));
   },
-  stop: () => {
+  stop: (): void => {
     ipcRenderer.send(prefixChannel(Channel.Stop));
   },
-  restart: () => {
+  restart: (): void => {
     ipcRenderer.send(prefixChannel(Channel.Restart));
   },
 };
@@ -68,7 +67,7 @@ const getState = (timer: Timer): TimerState => ({
   remaining: timer.remaining,
 });
 
-export const connectTimerProxy = (timer: Timer) => {
+export const connectTimerProxy = (timer: Timer): void => {
   ipcMain.handle(
     prefixChannel(Channel.State),
     async (): Promise<TimerState> => getState(timer)

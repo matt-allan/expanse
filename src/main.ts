@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app } from "electron";
 import { createTray } from "./tray";
 import { createWindow, connectWindow } from "./window";
 import { Event, Timer } from "./timer";

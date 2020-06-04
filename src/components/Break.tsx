@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Box } from "grommet";
 
 import { Breathe } from "./exercises/Breathe";
@@ -9,7 +9,7 @@ type BreakProps = {
   onEnd: () => void;
 };
 
-export const Break = ({ onEnd }: BreakProps) => {
+export const Break = ({ onEnd }: BreakProps): JSX.Element => {
   useEffect(() => {
     browserWindow.setFullScreen(true);
 

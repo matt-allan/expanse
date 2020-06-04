@@ -3,13 +3,13 @@ import { Grommet } from "grommet";
 
 import { theme } from "./../theme";
 import { TimerState } from "./../timer_proxy";
-import { events, Event, statuses, Status } from "./../timer_types";
+import { events, Event, Status } from "./../timer_types";
 import { Break } from "./Break";
 import { Timer } from "./Timer";
 
 const timerProxy = window.expanse.timer;
 
-export const App = () => {
+export const App = (): JSX.Element => {
   const [shouldBreak, setShouldBreak] = useState<boolean>(false);
 
   const [timerState, setTimerState] = useState<TimerState>({

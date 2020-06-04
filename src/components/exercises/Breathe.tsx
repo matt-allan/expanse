@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { defaultProps, Button } from "grommet";
 
-// Only undefined if you overwrite the theme
-// and dont use the deepMerge function.
+// Only undefined if you overwrite the theme and don't deepMerge.
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const colors = defaultProps!.theme!.global!.colors!;
 
 const pulse = keyframes`
@@ -79,7 +79,7 @@ type BreatheProps = {
   onEnd: () => void;
 };
 
-export const Breathe = ({ onEnd }: BreatheProps) => {
+export const Breathe = ({ onEnd }: BreatheProps): JSX.Element => {
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Grommet, Box, Button, Clock, Heading, Meter } from "grommet";
-import { Play, Pause, Resume, Refresh } from "grommet-icons";
+import React from "react";
+import { Box, Button, Clock, Meter } from "grommet";
+import { Play, Pause, Refresh } from "grommet-icons";
 
 import { Status } from "./../timer_types";
 
@@ -27,7 +27,7 @@ export const Timer = ({
   onStart,
   onStop,
   onRestart,
-}: TimerProps) => {
+}: TimerProps): JSX.Element => {
   const started = status == Status.Started;
 
   return (

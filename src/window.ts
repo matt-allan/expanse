@@ -1,9 +1,9 @@
-import { app, BrowserWindow } from "electron";
+import { BrowserWindow } from "electron";
 
 import { Event, Timer } from "./timer";
 
-declare var MAIN_WINDOW_WEBPACK_ENTRY: string;
-declare var MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
+declare let MAIN_WINDOW_WEBPACK_ENTRY: string;
+declare let MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -38,7 +38,7 @@ export const createWindow = (): BrowserWindow => {
   return mainWindow;
 };
 
-export const connectWindow = (timer: Timer) => {
+export const connectWindow = (timer: Timer): void => {
   timer.on(Event.Ended, () => {
     createWindow();
     if (!mainWindow) {

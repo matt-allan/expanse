@@ -1,4 +1,4 @@
-import { app, Menu, Tray } from "electron";
+import { Menu, Tray } from "electron";
 import { createWindow } from "./window";
 import { Event, Status, Timer } from "./timer";
 
@@ -46,7 +46,7 @@ const contextMenu = (timer: Timer): Menu => {
   ]);
 };
 
-export const createTray = (timer: Timer) => {
+export const createTray = (timer: Timer): void => {
   let eighths = calcEighths(timer);
 
   tray = new Tray(trayImage(eighths));
@@ -56,12 +56,12 @@ export const createTray = (timer: Timer) => {
   tray.setContextMenu(menu);
 
   const updateTrayImage = () => {
-    let lastEighths = eighths;
+    const lastEighths = eighths;
 
     eighths = calcEighths(timer);
 
-    if (eighths !== lastEighths) {
-      tray!.setImage(trayImage(eighths));
+    if (eighths !== lastEighths && tray) {
+      tray.setImage(trayImage(eighths));
     }
   };
 

@@ -1,6 +1,5 @@
 import React from "react";
 import * as ReactDOM from "react-dom";
-import { Grommet } from "grommet";
 
 import { App } from "./components/App";
 

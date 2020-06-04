@@ -1,5 +1,4 @@
 import {
-  BrowserWindow,
   ipcMain,
   ipcRenderer,
   IpcMainInvokeEvent,
@@ -23,7 +22,7 @@ export const browserWindow = {
   },
 };
 
-export const connectBrowserWindowProxy = () => {
+export const connectBrowserWindowProxy = (): void => {
   ipcMain.handle(
     prefixChannel(Channel.SetFullScreen),
     (event: IpcMainInvokeEvent, flag: boolean): void => {
