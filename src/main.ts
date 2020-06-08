@@ -10,10 +10,7 @@ if (require("electron-squirrel-startup")) {
   app.quit();
 }
 
-const timer = new Timer(0, 10);
-
-// debug
-timer.on(Event.Tick, (seconds: number) => console.log(seconds));
+const timer = new Timer(25);
 
 app.on("ready", () => {
   createWindow();
