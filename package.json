@@ -18,6 +18,11 @@
     "email": "matt@mattallan.me"
   },
   "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format && yarn lint"
+    }
+  },
   "config": {
     "forge": {
       "packagerConfig": {},
@@ -105,6 +110,7 @@
     "electron": "7.1.3",
     "eslint": "^7.1.0",
     "eslint-plugin-react": "^7.20.0",
+    "husky": "^4.2.5",
     "node-loader": "^0.6.0",
     "prettier": "2.0.5",
     "style-loader": "^0.23.1",
