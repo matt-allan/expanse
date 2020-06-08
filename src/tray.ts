@@ -1,4 +1,6 @@
 import { Menu, Tray } from "electron";
+import path from "path";
+
 import { createWindow } from "./window";
 import { Event, Status, Timer } from "./timer";
 
@@ -6,14 +8,17 @@ import { Event, Status, Timer } from "./timer";
 // be removed automatically when the JavaScript object is garbage collected.
 let tray: Tray | null;
 
-const calcEighths = (timer: Timer) => {
+const calcEighths = (timer: Timer): number => {
   const eighths = Math.round((timer.remaining / timer.seconds) * 8);
 
   return eighths > 0 ? eighths : 8;
 };
 
-const trayImage = (eighths: number) =>
-  `./resources/img/menubar/${eighths}-8/menubar-iconTemplate.png`;
+const trayImage = (eighths: number): string =>
+  path.resolve(
+    __dirname,
+    `./resources/img/menubar/${eighths}-8/menubar-iconTemplate.png`
+  );
 
 const contextMenu = (timer: Timer): Menu => {
   return Menu.buildFromTemplate([

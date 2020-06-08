@@ -1,7 +1,7 @@
 import { app } from "electron";
 import { createTray } from "./tray";
 import { createWindow, connectWindow } from "./window";
-import { Event, Timer } from "./timer";
+import { Timer } from "./timer";
 import { connectTimerProxy } from "./timer_proxy";
 import { connectBrowserWindowProxy } from "./window_proxy";
 

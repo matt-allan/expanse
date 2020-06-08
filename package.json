@@ -78,6 +78,7 @@
     }
   },
   "dependencies": {
+    "copy-webpack-plugin": "^6.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "grommet": "https://github.com/grommet/grommet/tarball/stable",
     "grommet-icons": "^4.4.0",
