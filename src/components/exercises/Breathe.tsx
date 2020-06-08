@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { defaultProps, Button } from "grommet";
 
+import { Exercise } from "../Exercise";
+import { Caption } from "../Caption";
+
 // Only undefined if you overwrite the theme and don't deepMerge.
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const colors = defaultProps!.theme!.global!.colors!;
@@ -93,13 +96,22 @@ export const Breathe = ({ onEnd }: BreatheProps): JSX.Element => {
   }
 
   return (
-    <Container>
-      <Circle />
-      <Circle />
-      <Circle />
-      <Circle />
-      <Circle />
-      <Circle />
-    </Container>
+    <Exercise>
+      <Container>
+        <Circle />
+        <Circle />
+        <Circle />
+        <Circle />
+        <Circle />
+        <Circle />
+      </Container>
+      <Caption
+        frames={[
+          { start: 0, end: 7, caption: "Bring your attention to your breath." },
+          { start: 8, end: 12, caption: "Now inhale..." },
+          { start: 13, end: 15, caption: "and exhale." },
+        ]}
+      />
+    </Exercise>
   );
 };

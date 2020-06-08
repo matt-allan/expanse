@@ -1,8 +1,4 @@
-import {
-  ipcMain,
-  ipcRenderer,
-  IpcMainInvokeEvent,
-} from "electron";
+import { ipcMain, ipcRenderer, IpcMainInvokeEvent } from "electron";
 
 import { mainWindow } from "./window";
 

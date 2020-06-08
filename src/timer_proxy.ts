@@ -1,8 +1,4 @@
-import {
-  ipcMain,
-  ipcRenderer,
-  IpcRendererEvent,
-} from "electron";
+import { ipcMain, ipcRenderer, IpcRendererEvent } from "electron";
 
 import { Timer } from "./timer";
 import { events, Status } from "./timer_types";
