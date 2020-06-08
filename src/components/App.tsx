@@ -6,6 +6,7 @@ import { TimerState } from "./../timer_proxy";
 import { events, Event, Status } from "./../timer_types";
 import { Break } from "./Break";
 import { Timer } from "./Timer";
+import { useDarkMode } from "../hooks/useDarkMode";
 
 const timerProxy = window.expanse.timer;
 
@@ -43,6 +44,8 @@ export const App = (): JSX.Element => {
     };
   }, []);
 
+  const darkMode = useDarkMode();
+
   const endBreak = () => {
     setShouldBreak(false);
     timerProxy.restart();
@@ -51,7 +54,7 @@ export const App = (): JSX.Element => {
   const { seconds, remaining, status } = timerState;
 
   return (
-    <Grommet theme={theme}>
+    <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"}>
       {shouldBreak ? (
         <Break onEnd={endBreak} />
       ) : (
