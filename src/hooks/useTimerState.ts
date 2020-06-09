@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { TimerState } from "./../timer_proxy";
-import { events, Event, Status } from "./../timer_types";
+import { events, Status } from "./../timer_types";
 
 const timerProxy = window.expanse.timer;
 
@@ -26,7 +26,7 @@ export const useTimerState = (): TimerState => {
         timerProxy.removeAllListeners(event);
       }
     };
-  }, []); 
+  }, []);
 
   return timerState;
-}
+};

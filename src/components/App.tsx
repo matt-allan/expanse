@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grommet } from "grommet";
 
 import { theme } from "./../theme";
-import { TimerState } from "./../timer_proxy";
-import { events, Event, Status } from "./../timer_types";
+import { Status } from "./../timer_types";
 import { Break } from "./Break";
 import { Timer } from "./Timer";
 import { useDarkMode } from "../hooks/useDarkMode";
@@ -12,7 +11,7 @@ import { useTimerState } from "../hooks/useTimerState";
 const timerProxy = window.expanse.timer;
 
 export const App = (): JSX.Element => {
-  const darkMode = useDarkMode();  
+  const darkMode = useDarkMode();
 
   const [shouldBreak, setShouldBreak] = useState(false);
 
@@ -28,7 +27,7 @@ export const App = (): JSX.Element => {
   if (status == Status.Ended && !shouldBreak) {
     setShouldBreak(true);
   }
-  
+
   return (
     <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"} full>
       {shouldBreak ? (
