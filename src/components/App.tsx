@@ -7,52 +7,28 @@ import { events, Event, Status } from "./../timer_types";
 import { Break } from "./Break";
 import { Timer } from "./Timer";
 import { useDarkMode } from "../hooks/useDarkMode";
+import { useTimerState } from "../hooks/useTimerState";
 
 const timerProxy = window.expanse.timer;
 
 export const App = (): JSX.Element => {
-  const [shouldBreak, setShouldBreak] = useState<boolean>(false);
+  const darkMode = useDarkMode();  
 
-  const [timerState, setTimerState] = useState<TimerState>({
-    seconds: 0,
-    remaining: 0,
-    status: Status.Stopped,
-  });
+  const [shouldBreak, setShouldBreak] = useState(false);
 
-  const syncState = (state: TimerState) => {
-    setTimerState(state);
-  };
+  const timerState = useTimerState();
 
-  useEffect(() => {
-    timerProxy.state().then((state: TimerState) => {
-      syncState(state);
-      if (state.status == Status.Ended) {
-        setShouldBreak(true);
-      }
-    });
-
-    for (const event of events) {
-      timerProxy.on(event, syncState);
-    }
-
-    timerProxy.on(Event.Ended, () => setShouldBreak(true));
-
-    return () => {
-      for (const event of events) {
-        timerProxy.removeAllListeners(event);
-      }
-    };
-  }, []);
-
-  const darkMode = useDarkMode();
+  const { seconds, remaining, status } = timerState;
 
   const endBreak = () => {
     setShouldBreak(false);
     timerProxy.restart();
   };
 
-  const { seconds, remaining, status } = timerState;
-
+  if (status == Status.Ended && !shouldBreak) {
+    setShouldBreak(true);
+  }
+  
   return (
     <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"} full>
       {shouldBreak ? (
