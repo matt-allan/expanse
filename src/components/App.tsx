@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grommet } from "grommet";
+import { defaultProps, Grommet } from "grommet";
 
 import { theme } from "./../theme";
 import { TimerState } from "./../timer_proxy";
@@ -54,7 +54,7 @@ export const App = (): JSX.Element => {
   const { seconds, remaining, status } = timerState;
 
   return (
-    <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"}>
+    <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"} full>
       {shouldBreak ? (
         <Break onEnd={endBreak} />
       ) : (
