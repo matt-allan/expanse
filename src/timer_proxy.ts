@@ -16,6 +16,7 @@ enum Channel {
   Stop = "stop",
   Restart = "restart",
   On = "on",
+  Seek = "seek",
 }
 
 const prefixChannel = (channel: Channel) => `timer:${channel}`;
@@ -29,6 +30,7 @@ export interface TimerProxy {
   start(): void;
   stop(): void;
   restart(): void;
+  seek(seconds: number): void;
 }
 
 export const timer = {
@@ -55,6 +57,9 @@ export const timer = {
   restart: (): void => {
     ipcRenderer.send(prefixChannel(Channel.Restart));
   },
+  seek: (seconds: number): void => {
+    ipcRenderer.send(prefixChannel(Channel.Seek), seconds);
+  },
 };
 
 const getState = (timer: Timer): TimerState => ({
@@ -71,6 +76,9 @@ export const connectTimerProxy = (timer: Timer): void => {
   ipcMain.on(prefixChannel(Channel.Start), () => timer.start());
   ipcMain.on(prefixChannel(Channel.Stop), () => timer.stop());
   ipcMain.on(prefixChannel(Channel.Restart), () => timer.restart());
+  ipcMain.on(prefixChannel(Channel.Seek), (event, seconds: number) =>
+    timer.seek(seconds)
+  );
 
   const send = (channel: string) => {
     if (mainWindow) {

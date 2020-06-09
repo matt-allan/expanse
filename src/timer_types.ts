@@ -12,6 +12,7 @@ export enum Event {
   Restarted = "restarted",
   Ended = "ended",
   Tick = "tick",
+  Seek = "seek",
 }
 
 export const events = Object.values(Event);

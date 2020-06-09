@@ -60,6 +60,18 @@ export class Timer extends EventEmitter {
     this.emit(Event.Restarted);
   };
 
+  seek = (seconds: number): void => {
+    if (this.status == Status.Started) {
+      this.stop();
+    }
+
+    this.remaining = seconds;
+
+    this.start();
+
+    this.emit(Event.Seek);
+  };
+
   end = (): void => {
     this.stopTimer();
 
