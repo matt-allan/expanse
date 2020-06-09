@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { defaultProps, Grommet } from "grommet";
+import { Grommet } from "grommet";
 
 import { theme } from "./../theme";
 import { TimerState } from "./../timer_proxy";
