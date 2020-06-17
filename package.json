@@ -85,7 +85,7 @@
   "dependencies": {
     "copy-webpack-plugin": "^6.0.2",
     "electron-squirrel-startup": "^1.0.0",
-    "grommet": "https://github.com/grommet/grommet/tarball/stable",
+    "grommet": "^v2.14.0",
     "grommet-icons": "^4.4.0",
     "polished": "^3.5.2",
     "react": "^16.12.0",
