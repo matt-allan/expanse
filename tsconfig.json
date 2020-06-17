@@ -13,7 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react",
-    "types": ["node"]
+    "types": ["node", "jest"]
   },
   "include": ["src"]
 }
