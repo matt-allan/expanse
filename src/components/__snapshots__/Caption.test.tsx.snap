@@ -1,13 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`renders 1`] = `
-<div
-  className="StyledBox-sc-13pk1d4-0 dMKPgk"
+<Box
+  animation={
+    Array [
+      Object {
+        "delay": 0,
+        "duration": 1000,
+        "type": "fadeIn",
+      },
+      Object {
+        "delay": 2500,
+        "duration": 500,
+        "type": "fadeOut",
+      },
+    ]
+  }
 >
-  <span
-    className="StyledText-sc-1sadyjn-0 hUokoe"
+  <Text
+    level={1}
   >
     Hello...
-  </span>
-</div>
+  </Text>
+</Box>
 `;
