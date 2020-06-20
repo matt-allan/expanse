@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<Fragment>
+  <Box
+    align="center"
+    justify="center"
+    pad={
+      Object {
+        "bottom": "small",
+        "top": "large",
+      }
+    }
+  >
+    <Meter
+      background="light-2"
+      max={300}
+      type="circle"
+      values={
+        Array [
+          Object {
+            "value": 300,
+          },
+        ]
+      }
+    />
+  </Box>
+  <Box
+    align="center"
+    justify="center"
+    pad="small"
+  >
+    <Clock
+      a11yTitle="countdown timer until next break"
+      alignSelf="center"
+      margin="xlarge"
+      run={false}
+      size="xlarge"
+      time="PT0H5M0S"
+      type="digital"
+    />
+  </Box>
+  <Box
+    direction="row"
+    gap="medium"
+    justify="center"
+    pad={
+      Object {
+        "bottom": "large",
+        "top": "small",
+      }
+    }
+  >
+    <Button
+      icon={<Refresh />}
+      onClick={[MockFunction]}
+      plain={true}
+    />
+    <Button
+      icon={<Play />}
+      onClick={[MockFunction]}
+      plain={true}
+    />
+  </Box>
+</Fragment>
+`;

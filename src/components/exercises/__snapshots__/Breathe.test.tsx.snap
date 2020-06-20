@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders 1`] = `
+<Component>
+  <styled.div>
+    <styled.div />
+    <styled.div />
+    <styled.div />
+    <styled.div />
+    <styled.div />
+    <styled.div />
+  </styled.div>
+  <Component
+    frames={
+      Array [
+        Object {
+          "caption": "Bring your attention to your breath.",
+          "end": 7,
+          "start": 0,
+        },
+        Object {
+          "caption": "Now inhale...",
+          "end": 12,
+          "start": 8,
+        },
+        Object {
+          "caption": "and exhale.",
+          "end": 15,
+          "start": 13,
+        },
+      ]
+    }
+  />
+</Component>
+`;
