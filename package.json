@@ -70,7 +70,7 @@
               "entryPoints": [
                 {
                   "html": "./src/index.html",
-                  "js": "./src/App.tsx",
+                  "js": "./src/app.tsx",
                   "name": "main_window",
                   "preload": {
                     "js": "./src/preload.ts"
