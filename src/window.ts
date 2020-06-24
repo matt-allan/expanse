@@ -26,6 +26,7 @@ export const createWindow = (): BrowserWindow => {
       contextIsolation: true,
       enableRemoteModule: false,
       nodeIntegration: false,
+      sandbox: true,
     },
   });
 
