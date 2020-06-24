@@ -18,7 +18,7 @@
     "name": "Matthew Allan",
     "email": "matt@mattallan.me"
   },
-  "license": "MIT",
+  "license": "GPL-3.0",
   "husky": {
     "hooks": {
       "pre-commit": "yarn format && yarn lint"
