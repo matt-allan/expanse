@@ -6,4 +6,10 @@
 - Prevent repetitive strain injuries with gentle stretches you can do at your desk
 - Finish work without feeling tired and achy
 
-![Screenshot of the application running, showing a timer](https://repository-images.githubusercontent.com/261011610/abdb8b80-b48a-11ea-890d-696a39ace15c)
+<p align="center">
+  <img alt="Screenshot of the application running, showing a timer" src="./.github/screenshot.png">
+</p>
+
+## Status
+
+The app is not ready yet. There is still a lot to do. You can see everything that needs to be done [under the Projects tab](https://github.com/matt-allan/expanse/projects/1). Contributions welcome!
