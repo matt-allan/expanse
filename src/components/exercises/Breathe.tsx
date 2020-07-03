@@ -86,7 +86,7 @@ export const Breathe = ({ onEnd }: BreatheProps): JSX.Element => {
   const [finished, setFinished] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setFinished(true), 1000 * 60 * 2);
+    const timer = setTimeout(() => setFinished(true), 1000 * 60 * 1);
 
     return () => clearTimeout(timer);
   }, []);
