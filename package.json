@@ -26,7 +26,11 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "extendInfo": {
+          "NSUserNotificationAlertStyle": "alert"
+        }
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

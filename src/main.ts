@@ -1,7 +1,9 @@
 import { app } from "electron";
+
 import { createTray } from "./tray";
-import { createWindow, connectWindow } from "./window";
+import { createWindow } from "./window";
 import { Timer } from "./timer";
+import { connectNotification } from "./notification";
 import { connectTimerProxy } from "./timer_proxy";
 import { connectBrowserWindowProxy } from "./window_proxy";
 
@@ -14,10 +16,9 @@ const timer = new Timer(25);
 
 app.on("ready", () => {
   createWindow();
-  connectWindow(timer);
   connectTimerProxy(timer);
   connectBrowserWindowProxy();
-
+  connectNotification(timer);
   createTray(timer);
 });
 
