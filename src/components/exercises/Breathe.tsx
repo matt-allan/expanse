@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { defaultProps, Button } from "grommet";
+import { defaultProps } from "grommet";
 
 import { Exercise } from "../Exercise";
 import { Caption } from "../Caption";
@@ -91,12 +91,8 @@ export const Breathe = ({ onEnd }: BreatheProps): JSX.Element => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (finished) {
-    return <Button primary label="Back to work" onClick={onEnd} />;
-  }
-
   return (
-    <Exercise>
+    <Exercise finished={finished} onEnd={onEnd}>
       <Container>
         <Circle />
         <Circle />
