@@ -3,7 +3,7 @@ import { Grommet } from "grommet";
 
 import { theme } from "./../theme";
 import { Status } from "./../timer_types";
-import { Break } from "./Break";
+import { Breathe } from "./exercises/Breathe";
 import { Timer } from "./Timer";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { useTimerState } from "../hooks/useTimerState";
@@ -31,7 +31,7 @@ export const App = (): JSX.Element => {
   return (
     <Grommet theme={theme} themeMode={darkMode ? "dark" : "light"} full>
       {shouldBreak ? (
-        <Break onEnd={endBreak} />
+        <Breathe onEnd={endBreak} />
       ) : (
         <Timer
           seconds={seconds}

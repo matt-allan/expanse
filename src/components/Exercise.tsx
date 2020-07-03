@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Layer } from "grommet";
 import { LinkPrevious } from "grommet-icons";
 import styled from "styled-components";
 
 import { useVisisbleOnMouseMove } from "../hooks/useVisibleOnMouseMove";
+
+const browserWindow = window.expanse.browserWindow;
 
 type ExerciseProps = {
   finished: boolean;
@@ -23,6 +25,12 @@ export const Exercise = ({
   onEnd,
 }: React.PropsWithChildren<ExerciseProps>): JSX.Element => {
   const overlayVisible = useVisisbleOnMouseMove(2000);
+
+  useEffect(() => {
+    browserWindow.setFullScreen(true);
+
+    return () => browserWindow.setFullScreen(false);
+  }, []);
 
   if (finished) {
     return <Button primary label="Back to work" onClick={onEnd} />;
