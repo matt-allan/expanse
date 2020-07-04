@@ -1,5 +1,9 @@
 import { Timer, Status, Event } from "./timer";
 
+/**
+ * @jest-environment node
+ */
+
 jest.useFakeTimers();
 
 describe("timer", () => {

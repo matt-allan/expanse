@@ -7,8 +7,7 @@ import { Breathe } from "./exercises/Breathe";
 import { Timer } from "./Timer";
 import { useDarkMode } from "../hooks/useDarkMode";
 import { useTimerState } from "../hooks/useTimerState";
-
-const timerProxy = window.expanse.timer;
+import { timer as timerProxy } from "../expanse";
 
 export const App = (): JSX.Element => {
   const darkMode = useDarkMode();

@@ -4,8 +4,7 @@ import { LinkPrevious } from "grommet-icons";
 import styled from "styled-components";
 
 import { useVisisbleOnMouseMove } from "../hooks/useVisibleOnMouseMove";
-
-const browserWindow = window.expanse.browserWindow;
+import { browserWindow } from "../expanse";
 
 type ExerciseProps = {
   finished: boolean;
