@@ -12,4 +12,4 @@
 
 ## Status
 
-The app is not ready yet. There is still a lot to do. You can see everything that needs to be done [under the Projects tab](https://github.com/matt-allan/expanse/projects/1). Contributions welcome!
+This project is indefinitely on hold. Apple is refusing to let me get a developer license, and without a developer license I can't use the notification APIs necessary for MacOS support.
