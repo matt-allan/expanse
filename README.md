@@ -2,7 +2,7 @@
 
 💻 A desktop app that helps you avoid repetitive strain injuries
 
-- Feel let’s stressed and more mindful with regular breaks
+- Feel less stressed and more mindful with regular breaks
 - Prevent repetitive strain injuries with gentle stretches you can do at your desk
 - Finish work without feeling tired and achy
 
